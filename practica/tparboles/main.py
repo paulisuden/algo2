@@ -1,1 +1,2 @@
-from avltree import *
+
+print('hola')
