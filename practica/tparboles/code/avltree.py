@@ -20,7 +20,6 @@ class AVLNode:
   h = None
 
 """Implementar la operación insert() en  el módulo avltree.py garantizando que el árbol binario resultante sea un árbol AVL.  """
-#en que momento voy a usar calculateBalance y en cual update_bf?
 #una vez insertado el nuevo nodo, debo: 
 #1) recorrer el arbol desde el nodo insertado hacia la raiz, 
 #2) calcular el bf y height de cada nodo en el camino y 
@@ -92,7 +91,6 @@ Descripción: balancea un árbol binario de búsqueda. Para esto se deberá prim
 Entrada: El árbol binario de tipo AVL  sobre el cual se quiere operar.
 Salida: Un árbol binario de búsqueda balanceado. Es decir luego de esta operación se cumple que la altura (h) de su subárbol derecho e izquierdo difieren a lo sumo en una unidad."""
 
-#####PROBAR
 
 def reBalanceR(AVLTree,current):
   if current == None:   #caso base
@@ -123,15 +121,14 @@ Descripción: Calcula el factor de balanceo de un árbol binario de búsqueda.
 Entrada: El árbol AVL  sobre el cual se quiere operar.
 Salida: El árbol AVL con el valor de balanceFactor para cada subarbol"""
 
-#######REVISAR
 
 def calculateHeight(current):
   if current == None:   #CASO
     return 0            #BASE    
   else:
     bf = calculateHeight(current.leftnode)-calculateHeight(current.rightnode)+1
-    #left = calculateHeight(current.leftnode)
-    #right = calculateHeight(current.rightnode)
+    left = calculateHeight(current.leftnode)
+    right = calculateHeight(current.rightnode)
     return bf
 
 def calculateBalanceR(current):
@@ -147,24 +144,6 @@ def calculateBalance(AVLTree):
   calculateBalanceR(AVLTree.root)
   return
   
-"""def rotateLeft(T,avlnode): #mi avlnode es quien sera la raiz ahora
-  exroot = avlnode.parent
-  if avlnode.leftnode != None:
-    auxiliarNode = avlnode.leftnode 
-  T.root = avlnode
-  avlnode.leftnode = exroot
-  auxiliarNode = exroot.rightnode 
-  return avlnode
-  
-def rotateRight(T,avlnode):
-  exroot = avlnode.parent
-  if avlnode.rightnode != None:
-    auxiliarNode = avlnode.rightnode 
-  T.root = avlnode
-  avlnode.rightnode = exroot
-  auxiliarNode = exroot.leftnode
-  return avlnode """
-
 
 def rotateLeft(T,avlnode):
   newRoot = avlnode.rightnode #asigno la nueva raiz
@@ -185,7 +164,6 @@ def rotateLeft(T,avlnode):
       
   avlnode.parent = newRoot
 
-  
 def rotateRight(T,avlnode):
   newRoot = avlnode.leftnode  #asigno la nueva raiz
   newRoot.rightnode = avlnode 
@@ -201,31 +179,12 @@ def rotateRight(T,avlnode):
       avlnode.parent.rightnode = newRoot
     else:
       avlnode.parent.leftnode = newRoot
-      
+   
   avlnode.parent = newRoot
-  
-####################################################################################################################
 
-#SEARCH    
-def searchR(current, element):
-    if (current == None):
-        return None
+"""Implementar la operación delete() en  el módulo avltree.py garantizando que el árbol binario resultante sea un árbol AVL."""
 
-    if (current.value == element):
-        return current.key
-
-    leftNode = searchR(current.leftnode, element)
-    if (leftNode != None):
-        return leftNode
-
-    rightNode = searchR(current.rightnode, element)
-    if (rightNode != None):
-        return rightNode
-      
-def search(B, element):
-    return searchR(B.root, element)
-
-#DELETE
+  #DELETE
 def searchKeyR(current, key):
     if (current == None):
         return None
@@ -263,18 +222,19 @@ def deleteKey(B, key):
 def deleteR(B, current):
   if (current == None):
     return current
-  node_parent = current.parent #guardo el padre del nodo a eliminar para luego invocar a update_bf
   #Caso 1
   if (current.leftnode == None and current.rightnode == None):
     if (current.parent.leftnode != None and current.parent.leftnode == current):
+      node = current.parent
       current.parent.leftnode = None
 
     if (current.parent.rightnode != None and current.parent.rightnode == current):
+      node = current.parent
       current.parent.rightnode = None
     
     #Caso 2a
   elif (current.leftnode != None and current.rightnode == None):
-    
+    node = current.leftnode
     if (current.parent.leftnode != None and current.parent.leftnode == current):
       current.parent.leftnode = current.leftnode
     if (current.parent.rightnode != None and current.parent.rightnode == current):
@@ -282,6 +242,7 @@ def deleteR(B, current):
           
     #Caso 2b
   elif (current.leftnode == None and current.rightnode != None):
+    node = current.rightnode
     if (current.parent.leftnode != None and current.parent.leftnode == current):
       current.parent.leftnode = current.rightnode
     if (current.parent.rightnode != None and current.parent.rightnode == current):
@@ -308,7 +269,7 @@ def deleteR(B, current):
 
   					"""
         smallestnode = smallestNode(current.rightnode)
-
+        node = smallestnode
         smallestnode.parent = None
         if (current.leftnode == smallestnode):
             current.leftnode = None
@@ -322,8 +283,9 @@ def deleteR(B, current):
             smallestnode.leftnode.parent = smallestnode
         B.root = smallestnode
 
-    
-  update_bf(B,node_parent)  #actualizo height y bf
+  #con la variable node voy guardando los nodos segun la condición para luego actualizar el bf del AVL
+  #una vez eliminado el nodo, llamo a la funcion update_bf   
+  update_bf(B,node)  #actualizo height y bf
   return B #retorno el arbol balaceado
 
   
@@ -343,6 +305,27 @@ def smallestNode(current):
     else:
         return current
 
+  
+####################################################################################################################
+
+#SEARCH    
+def searchR(current, element):
+    if (current == None):
+        return None
+
+    if (current.value == element):
+        return current.key
+
+    leftNode = searchR(current.leftnode, element)
+    if (leftNode != None):
+        return leftNode
+
+    rightNode = searchR(current.rightnode, element)
+    if (rightNode != None):
+        return rightNode
+      
+def search(B, element):
+    return searchR(B.root, element)
 
       
 #ACCESS
