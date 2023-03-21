@@ -3,6 +3,13 @@ class Node:
   value=None
   nextNode=None
 
+class Node:
+  value=None
+  nextNode=None
+class LinkedList:
+  head=None
+  
+
 def printLista(L):
   current = L.head
   while current != None:

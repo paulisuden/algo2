@@ -1,19 +1,23 @@
 import algo1
 from linkedlist import *
 import random
+import math
+
 
 #Ejercicio 4:
 """Implementar un algoritmo que ordene una lista de elementos donde siempre el elemento del medio de 
 la lista contiene antes que él en la lista la mitad de los elementos menores que él. 
 Explique la estrategia de ordenación utilizada."""
 
+
 def ordeno_antes(L,current,medio):
+  print(current.value)
   #en esta 1er parte llevo los elementos mas grandes que 'medio' a su derecha y me aseguro de tener antes de el elementos mas chicos
-  if current != None or current != medio:
+  if current != medio:
     if current.value > medio.value:
       aux = current
       next = current.nextNode
-      delete(L,current)
+      delete(L,current.value)
       aux.nextNode = medio.nextNode
       medio.nextNode = aux
       ordeno_antes(L,next,medio)
@@ -21,6 +25,8 @@ def ordeno_antes(L,current,medio):
       ordeno_antes(L,current.nextNode,medio)
   else:
     return L
+  
+
 def ordeno_dps(L,current,medio):
   #en esta 2da parte llevo los elementos mas chicos que 'medio' a su izq y me aseguro de tener antes de el elementos mas chicos y dps los mas grandes
   if current != None:
@@ -35,10 +41,41 @@ def ordeno_dps(L,current,medio):
   else:
     return L
   
+class LinkedList:
+  head=None
+class Node:
+  value=None
+  nextNode=None
 
+L = LinkedList()
+add(L,9)
+add(L,10)
+add(L,6)
+add(L,1)
+add(L,4)
+add(L,5)
+add(L,8)
+add(L,2)
+add(L,3)
+add(L,7)
+printLista(L)
+
+mitadPos = math.trunc(length(L)/2)
+medio = L.head
+for i in range(1,mitadPos):
+  medio = medio.nextNode
+
+print (medio.value)
 
 ordeno_antes(L,L.head,medio)
-ordeno_dps(L,medio.nextNode,medio)
+printLista(L)
+
+"""ordeno_dps(L,medio.nextNode,medio)
+
+printLista(L)
+"""
+
+
 #EJERCICIO 5
 
 """Implementar un algoritmo Contiene-Suma(A,n) que recibe una lista de enteros A y 
