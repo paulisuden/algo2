@@ -1,10 +1,11 @@
 from avltree import *
 from algo1 import *
-from linkedlist import *
-from binarytree import *
+#from linkedlist import *
+#from binarytree import *
 
 class LinkedList:
   head=None
+
 class AVLTree:
 	root = None
 
@@ -37,4 +38,4 @@ insert(B,3,3)
 insert(B,2,2)
 insert(B,1,1)
 current = B.root
-
+print(current.bf)

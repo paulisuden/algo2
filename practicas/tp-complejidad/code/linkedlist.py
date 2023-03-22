@@ -128,3 +128,46 @@ def update(L,element,position):
     else:
       current.value = element
   return position
+def checkOrder(L):
+  menorAmayor=True
+  current1 = L.head
+  current2 = L.head.nextNode
+  while current2 != None:
+    if current1.value > current2.value:
+      menorAmayor=False
+    current1 = current1.nextNode
+    current2 = current2.nextNode
+  if menorAmayor==True:
+    return True
+  else:
+    return False
+
+def revert(L):
+	newList = LinkedList()
+	long = length(L)
+	current = L.head
+	for i in range(long):
+		long -= 1
+		add(newList, current.value)
+		current = current.nextNode
+	return newList
+
+def move(L,posInicio,posFinal):
+  element=access(L,posInicio)
+  size=length(L)
+  if posInicio > posFinal:
+    initialPosition = posInicio
+    finalPosition = posFinal
+  elif posInicio < posFinal:
+    initialPosition = posInicio-1
+    finalPosition = posFinal+1
+  else:
+    return
+  insert(L,element,finalPosition)
+  current = L.head
+  if posInicio == 0:
+    L.head = current.nextNode
+  else:
+    for i in range (0,initialPosition):
+      current = current.nextNode
+    current.nextNode = current.nextNode.nextNode
