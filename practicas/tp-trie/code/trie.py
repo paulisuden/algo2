@@ -3,23 +3,17 @@ from linkedlist import *
 class Node:
   value=None
   nextNode=None
-
-class Node:
-  value=None
-  nextNode=None
 class LinkedList:
   head=None
   
 
-
 class Trie:
 	root = None
-
 class TrieNode:
-    parent = None
-    children = None   
-    key = None
-    isEndOfWord = False
+  parent = None
+  children = None   
+  key = None
+  isEndOfWord = False
 
 T = Trie()
 
@@ -51,12 +45,14 @@ def insertR(L, palabra, caracter):
   #debo averiguar si ya existe el caracter que quiero insertar
   current = L.head
   while current != None:
+    #si existe, le asigno a node el current
     if current.value.key == palabra[caracter]:
-      node = current.value
+      node = current
       break
     L = L.nextNode
   #si el caracter no existe, lo agrego
   if current == None:
+    #si no existe, lo creo y creo su respectiva lista
     node = TrieNode()
     #node.parent = 
     node.children = LinkedList()
@@ -68,10 +64,61 @@ def insertR(L, palabra, caracter):
     node.value.isEndOfWord = True
 
   #llamo a la funcion recursiva para el próximo caracter
+  #mis parametros son los nodos hijos de mi nodo (lista), la palabra y el proximo caracter
   insertR(node.children, palabra, caracter+1)
+
+
+"""
+search(T,element)
+Descripción: Verifica que un elemento se encuentre dentro del Trie
+Entrada: El Trie sobre la cual se quiere buscar el elemento (Trie) y el valor del elemento (palabra)
+Salida: Devuelve False o True según se encuentre el elemento.
+"""
+
+def search(T,element):
+  #El árbol esta vacio
+  if T.root.children == None:
+     return False
+  else:
+    return searchR(T.root.children,element, 0,)
+
+def searchR(L,element,caracter):
+  L = L.head
+  #busco el caracter
+  while L != None:
+    #si lo encuentro lo guardo en none y rompo el bucle
+    if L.value.key == element[caracter]:
+      node = L.value.key
+      break
+    L = L.nextNode
+  if L == None:
+    return False
+  #pregunto si el caracter que encontre es el ultimo de la palabra que busco
+  elif caracter == (len(element)-1):
+    if node.value.isEndOfWord == True:
+      return True
+    else:
+      return False
+  else:
+    searchR(node.children,element,caracter+1)
+
+
+
+"""Ejercicio 3
+delete(T,element)
+Descripción: Elimina un elemento se encuentre dentro del Trie
+Entrada: El Trie sobre la cual se quiere eliminar el elemento (Trie) y el valor del elemento (palabra) a  eliminar.
+Salida: Devuelve False o True según se haya eliminado el elemento.
+CASOS
+*El elemento no se encuentra en el trie. No se modifica la estructura del trie
+*El elemento está presente y es único (ninguna parte del elemento contiene a otro). Se borran todos los nodos.
+*El elemento es parte de otro elemento más largo (prefijo). 
+ Se lo desmarca al indicador de fin de palabra para ese elemento.
+*El elemento está presente y tiene al menos un elemento incluido. 
+Se eliminan los nodos desde el final de la palabra hasta la primera hoja del elemento más largo.
+"""
+        
+   
     
-
-
-
 
 
