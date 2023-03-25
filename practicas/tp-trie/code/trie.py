@@ -117,7 +117,40 @@ CASOS
 *El elemento está presente y tiene al menos un elemento incluido. 
 Se eliminan los nodos desde el final de la palabra hasta la primera hoja del elemento más largo.
 """
-        
+def delete(T,element):
+  if T.root.children == None:
+    return False
+  else:
+    return deleteR(T.root.children,element, [0])
+  
+def deleteR(L,element,caracter):
+  L = L.head
+  while L != None:
+    if L.value.key == element[caracter]:
+      node = L.value.key
+      break
+    L = L.nextNode
+  if L == None: #no se encuentra la palabra
+    return False
+  else:
+    if caracter == len(element)-1:
+    #El elemento está presente y es único ó tiene al menos un elemento incluido.
+      if node.value.isEndOfWord == True and node.children == None:
+        delete(L,node)
+        deleteCaso2y3(L)
+
+      #la palabra esta pero no tiene marcada la ultima letra como fin de palabra
+      elif node.value.isEndOfWord == False:
+        return False
+      #la palabra esta pero es prefijo de otra: desmarco el indicador de fin de palabra
+      elif node.value.isEndOfWord == True and node.children != None:
+        node.value.isEndOfWord = False
+        return True
+
+def deleteCaso2y3(node):
+  if 
+  
+
    
     
 
