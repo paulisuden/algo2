@@ -16,7 +16,7 @@ class TrieNode:
   isEndOfWord = False
 
 T = Trie()
-
+T.root = TrieNode()
 
 """insert(T,element) 
 Descripción: inserta un elemento en T, siendo T un Trie.
@@ -24,18 +24,18 @@ Entrada: El Trie sobre la cual se quiere agregar el elemento (Trie)  y el valor 
 Salida:  No hay salida definida
 """
 def insert(T,element):
-    #La lista no esta creada
+  #La lista no esta creada
   if T.root.children == None:
-    #creo la lista 
-    #inserto el primer caracter (0)
+  #creo la lista 
+  #inserto el primer caracter (0)
     T.root.children = LinkedList()
     node = TrieNode()
     node.key = element[0]
     add(T.root.children, node)
     #asigno L a la lista que voy a recorrer ahora
-    L = T.root.children
+    #L = T.root.children
   #funcion recursiva que insertara el resto de los caracteres
-  insertR(L,element,1)
+  insertR(T.root.children,element,1)
 
 def insertR(L, palabra, caracter):
   #caso base
@@ -49,7 +49,7 @@ def insertR(L, palabra, caracter):
     if current.value.key == palabra[caracter]:
       node = current
       break
-    L = L.nextNode
+    current = current.nextNode
   #si el caracter no existe, lo agrego
   if current == None:
     #si no existe, lo creo y creo su respectiva lista
@@ -61,7 +61,7 @@ def insertR(L, palabra, caracter):
 
   #end of word
   if caracter == len(palabra)-1:
-    node.value.isEndOfWord = True
+    node.isEndOfWord = True
 
   #llamo a la funcion recursiva para el próximo caracter
   #mis parametros son los nodos hijos de mi nodo (lista), la palabra y el proximo caracter
@@ -86,7 +86,7 @@ def searchR(L,element,caracter):
   L = L.head
   #busco el caracter
   while L != None:
-    #si lo encuentro lo guardo en none y rompo el bucle
+    #si lo encuentro lo guardo en node y rompo el bucle
     if L.value.key == element[caracter]:
       node = L.value.key
       break
@@ -136,8 +136,8 @@ def deleteR(L,element,caracter):
     if caracter == len(element)-1:
     #El elemento está presente y es único ó tiene al menos un elemento incluido.
       if node.value.isEndOfWord == True and node.children == None:
-        delete(L,node)
-        deleteCaso2y3(L)
+        delete(L,node.value)
+        deleteCaso2y3(L,node)
 
       #la palabra esta pero no tiene marcada la ultima letra como fin de palabra
       elif node.value.isEndOfWord == False:
@@ -147,8 +147,24 @@ def deleteR(L,element,caracter):
         node.value.isEndOfWord = False
         return True
 
-def deleteCaso2y3(node):
-  if 
+#me pregunto si al eliminar el nodo la lista ahora esta vacia o no. de estar vacía, 
+#puedo eliminar al nodo padre, caso contrario, NO puedo eliminar al nodo padre y hasta ahi llega mi eliminacion
+#node.parent apunta a todo lo que tiene(children, key, etc)
+
+def deleteCaso2y3(L,node):
+  delete(L,node.value)
+  if node.parent != None:
+    node = node.parent
+    if L == None:
+      deleteCaso2y3(node.children,node)
+    else:
+    #si es distinta de None, paro porque existen otras palabras 
+      return
+  #si es igual a None, es porque estoy en T.root y ya borré toda la palabra
+  else: 
+    return 
+
+  
   
 
    
