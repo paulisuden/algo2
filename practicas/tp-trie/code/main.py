@@ -1,6 +1,5 @@
 from trie import *
-
-
+from algo1 import *
 class Trie:
 	root = None
 class TrieNode:
@@ -9,9 +8,10 @@ class TrieNode:
   key = None
   isEndOfWord = False
 
-#cadena = String("Hola")
+T = Trie()
+T.root = TrieNode()
+
+
 insert(T,String("Hola"))
 insert(T,String("Holi"))
 insert(T,String("Holu"))
-
-print(search(T,String("Hola")))

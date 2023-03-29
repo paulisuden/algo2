@@ -15,8 +15,8 @@ class TrieNode:
   key = None
   isEndOfWord = False
 
-T = Trie()
-T.root = TrieNode()
+"""T = Trie()
+T.root = TrieNode()"""
 
 """insert(T,element) 
 Descripción: inserta un elemento en T, siendo T un Trie.
@@ -29,43 +29,52 @@ def insert(T,element):
   #creo la lista 
   #inserto el primer caracter (0)
     T.root.children = LinkedList()
-    node = TrieNode()
+    """    node = TrieNode()
+    node.parent = T.root
     node.key = element[0]
-    add(T.root.children, node)
+    node.children = LinkedList()
+    add(T.root.children, node)"""
     #asigno L a la lista que voy a recorrer ahora
     #L = T.root.children
   #funcion recursiva que insertara el resto de los caracteres
-  insertR(T.root.children,element,1)
+  insertR(T.root.children,element,0,T.root)
 
-def insertR(L, palabra, caracter):
+def insertR(L, palabra, caracter,parent):
   #caso base
   if caracter == len(palabra): 
-     return
-  
+    return
+
   #debo averiguar si ya existe el caracter que quiero insertar
-  current = L.head
-  while current != None:
-    #si existe, le asigno a node el current
-    if current.value.key == palabra[caracter]:
-      node = current
-      break
-    current = current.nextNode
-  #si el caracter no existe, lo agrego
-  if current == None:
-    #si no existe, lo creo y creo su respectiva lista
-    node = TrieNode()
-    #node.parent = 
-    node.children = LinkedList()
-    node.key = palabra[caracter]
-    add(L, node)
+  if L == None:
+    current = TrieNode()
+    current.parent = parent
+    current.children = LinkedList()
+    current.key = palabra[caracter]
+    add(L, current)
+  else:
+    current = L.head
+    while current != None:
+      #busco el caracter en la lista
+      if current.value.key == palabra[caracter]:
+        current = current.value
+        break
+      current = current.nextNode
+    #si el caracter no existe en la lista, lo agrego
+    if current == None:
+      current = TrieNode()
+      current.parent = parent
+      current.children = LinkedList()
+      current.key = palabra[caracter]
+      add(L, current)
 
   #end of word
   if caracter == len(palabra)-1:
-    node.isEndOfWord = True
+    current.isEndOfWord = True
+    return 
 
   #llamo a la funcion recursiva para el próximo caracter
-  #mis parametros son los nodos hijos de mi nodo (lista), la palabra y el proximo caracter
-  insertR(node.children, palabra, caracter+1)
+  #mis parametros son: la prox lista, la palabra, el prox caracter y el current que será el padre
+  insertR(current.children, palabra, caracter+1,current)
 
 
 """
