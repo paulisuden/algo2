@@ -48,7 +48,7 @@ def insertR(L, palabra, caracter,parent):
   if L == None:
     current = TrieNode()
     current.parent = parent
-    current.children = LinkedList()
+    #current.children = LinkedList()
     current.key = palabra[caracter]
     add(L, current)
   else:
@@ -97,19 +97,19 @@ def searchR(L,element,caracter):
   while L != None:
     #si lo encuentro lo guardo en node y rompo el bucle
     if L.value.key == element[caracter]:
-      node = L.value.key
+      node = L.value
       break
     L = L.nextNode
   if L == None:
     return False
   #pregunto si el caracter que encontre es el ultimo de la palabra que busco
-  elif caracter == (len(element)-1):
-    if node.value.isEndOfWord == True:
+  if caracter == (len(element)-1):
+    if node.isEndOfWord == True:
       return True
     else:
       return False
   else:
-    searchR(node.children,element,caracter+1)
+    return searchR(node.children,element,caracter+1)
 
 
 
@@ -130,48 +130,49 @@ def delete(T,element):
   if T.root.children == None:
     return False
   else:
-    return deleteR(T.root.children,element, [0])
+    return deleteR(T.root.children,element, 0)
   
 def deleteR(L,element,caracter):
   L = L.head
   while L != None:
     if L.value.key == element[caracter]:
-      node = L.value.key
+      node = L.value
       break
     L = L.nextNode
   if L == None: #no se encuentra la palabra
     return False
-  else:
-    if caracter == len(element)-1:
-    #El elemento está presente y es único ó tiene al menos un elemento incluido.
-      if node.value.isEndOfWord == True and node.children == None:
-        delete(L,node.value)
-        deleteCaso2y3(L,node)
 
-      #la palabra esta pero no tiene marcada la ultima letra como fin de palabra
-      elif node.value.isEndOfWord == False:
-        return False
-      #la palabra esta pero es prefijo de otra: desmarco el indicador de fin de palabra
-      elif node.value.isEndOfWord == True and node.children != None:
-        node.value.isEndOfWord = False
-        return True
+  if caracter == len(element)-1:
+  #El elemento está presente y es único ó tiene al menos un elemento incluido.
+    if node.isEndOfWord == True and node.children == None:
+      deleteCaso2y3(L,node)
+
+    #la palabra esta pero no tiene marcada la ultima letra como fin de palabra
+    elif node.isEndOfWord == False:
+      return False
+    #la palabra esta pero es prefijo de otra: desmarco el indicador de fin de palabra
+    elif node.isEndOfWord == True and node.children != None:
+      node.isEndOfWord = False
+      return True
+  else:
+    return deleteR(node.children,element,caracter+1)
 
 #me pregunto si al eliminar el nodo la lista ahora esta vacia o no. de estar vacía, 
 #puedo eliminar al nodo padre, caso contrario, NO puedo eliminar al nodo padre y hasta ahi llega mi eliminacion
 #node.parent apunta a todo lo que tiene(children, key, etc)
 
 def deleteCaso2y3(L,node):
-  delete(L,node.value)
+  delete(L,node)
   if node.parent != None:
     node = node.parent
     if L == None:
-      deleteCaso2y3(node.children,node)
+      deleteCaso2y3(node.children,node.key)
     else:
     #si es distinta de None, paro porque existen otras palabras 
-      return
+      return True
   #si es igual a None, es porque estoy en T.root y ya borré toda la palabra
   else: 
-    return 
+    return True
 
   
   
