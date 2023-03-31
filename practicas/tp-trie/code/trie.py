@@ -1,10 +1,11 @@
 from linkedlist import *
 
+class LinkedList:
+  head=None
 class Node:
   value=None
   nextNode=None
-class LinkedList:
-  head=None
+
   
 
 class Trie:
@@ -48,7 +49,7 @@ def insertR(L, palabra, caracter,parent):
   if L == None:
     current = TrieNode()
     current.parent = parent
-    #current.children = LinkedList()
+    current.children = LinkedList()
     current.key = palabra[caracter]
     add(L, current)
   else:
@@ -139,18 +140,18 @@ def deleteR(L,element,caracter):
       node = L.value
       break
     L = L.nextNode
-  if L == None: #no se encuentra la palabra
+  if L == None: #no se encuentra la palabra (C1)
     return False
 
   if caracter == len(element)-1:
-  #El elemento está presente y es único ó tiene al menos un elemento incluido.
-    if node.isEndOfWord == True and node.children == None:
-      deleteCaso2y3(L,node)
+  #El elemento está presente y es único ó tiene al menos un elemento incluido (C2y4).
+    if node.isEndOfWord == True and node.children.head == None:
+      deleteCaso2y4(L,node) #(node = L.value)
 
-    #la palabra esta pero no tiene marcada la ultima letra como fin de palabra
+    #la palabra esta pero no tiene marcada la ultima letra como fin de palabra 
     elif node.isEndOfWord == False:
       return False
-    #la palabra esta pero es prefijo de otra: desmarco el indicador de fin de palabra
+    #la palabra esta pero es prefijo de otra: desmarco el indicador de fin de palabra (C3)
     elif node.isEndOfWord == True and node.children != None:
       node.isEndOfWord = False
       return True
@@ -161,18 +162,15 @@ def deleteR(L,element,caracter):
 #puedo eliminar al nodo padre, caso contrario, NO puedo eliminar al nodo padre y hasta ahi llega mi eliminacion
 #node.parent apunta a todo lo que tiene(children, key, etc)
 
-def deleteCaso2y3(L,node):
-  delete(L,node)
-  if node.parent != None:
-    node = node.parent
-    if L == None:
-      deleteCaso2y3(node.children,node.key)
-    else:
-    #si es distinta de None, paro porque existen otras palabras 
-      return True
-  #si es igual a None, es porque estoy en T.root y ya borré toda la palabra
-  else: 
-    return True
+def deleteCaso2y4(L,node): #node = L.value
+  parent = node.parent
+  deleteL(L,node)
+  if L == None:
+    if parent != None:
+      deleteCaso2y4(L,parent.value)
+  return True
+  
+
 
   
   

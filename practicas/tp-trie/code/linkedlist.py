@@ -1,14 +1,9 @@
 from algo1 import *
-class Node:
-  value=None
-  nextNode=None
-
-class Node:
-  value=None
-  nextNode=None
 class LinkedList:
   head=None
-  
+class Node:
+  value=None
+  nextNode=None
 
 def printLista(L):
   current = L.head
@@ -28,7 +23,7 @@ def add(L,element):
     nuevoNodo.nextNode = current
     L.head = nuevoNodo
     
-def addInOrder (L, element): #(primero en entrar queda en la cabeza)
+def addInOrder (Q, element): #(primero en entrar queda en la cabeza)
   current =Q.head
   newNode = Node()
   newNode.value = element
@@ -41,7 +36,7 @@ def addInOrder (L, element): #(primero en entrar queda en la cabeza)
     current.nextNode = newNode
   return
 
-def search(L,element):
+def searchL(L,element):
   current = L.head
   currentPos = 0
   contador = 0
@@ -53,7 +48,7 @@ def search(L,element):
       current = current.nextNode
       currentPos += 1
 
-def insert(L,element,position):
+def insertL(L,element,position):
   current = L.head
   currentPos = 0
   if position == 0:
@@ -80,8 +75,8 @@ def insert(L,element,position):
         current.nextNode = nuevoNodo
   return position
 
-def delete(L,element):
-  position = search(L, element)
+def deleteL(L,element):
+  position = searchL(L, element)
   current = L.head
   if position == 0:
     L.head = L.head.nextNode
@@ -163,7 +158,7 @@ def move(L,posInicio,posFinal):
     finalPosition = posFinal+1
   else:
     return
-  insert(L,element,finalPosition)
+  insertL(L,element,finalPosition)
   current = L.head
   if posInicio == 0:
     L.head = current.nextNode
