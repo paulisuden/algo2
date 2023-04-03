@@ -13,7 +13,7 @@ T = Trie()
 T.root = TrieNode()
 
 
-insert(T,String("Hola"))
+"""insert(T,String("Hola"))
 insert(T,String("Holi"))
 insert(T,String("Holu"))
 insert(T,String("Pa"))
@@ -21,4 +21,10 @@ insert(T,String("Pat"))
 insert(T,String("ca"))
 
 print(delete(T,String("ca")))
-#print(search(T,String("ca")))
+print(search(T,String("car")))"""
+
+insert(T,String("Pan"))
+insert(T,String("Put"))
+insert(T,String("Pet"))
+insert(T,String("Pita"))
+buscoPatron(T,"P",3)

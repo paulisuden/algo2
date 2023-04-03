@@ -1,4 +1,5 @@
 from linkedlist import *
+from myqueue import *
 
 class LinkedList:
   head=None
@@ -6,7 +7,6 @@ class Node:
   value=None
   nextNode=None
 
-  
 
 class Trie:
 	root = None
@@ -134,19 +134,19 @@ def delete(T,element):
     return deleteR(T.root.children,element, 0)
   
 def deleteR(L,element,caracter):
-  L = L.head
-  while L != None:
-    if L.value.key == element[caracter]:
-      node = L.value
+  current = L.head
+  while current != None:
+    if current.value.key == element[caracter]:
+      node = current.value
       break
-    L = L.nextNode
-  if L == None: #no se encuentra la palabra (C1)
+    current = current.nextNode
+  if current == None: #no se encuentra la palabra (C1)
     return False
 
   if caracter == len(element)-1:
   #El elemento está presente y es único ó tiene al menos un elemento incluido (C2y4).
     if node.isEndOfWord == True and node.children.head == None:
-      deleteCaso2y4(L,node) #(node = L.value)
+      return deleteCaso2y4(L,node) #(node = current.value)
 
     #la palabra esta pero no tiene marcada la ultima letra como fin de palabra 
     elif node.isEndOfWord == False:
@@ -163,19 +163,63 @@ def deleteR(L,element,caracter):
 #node.parent apunta a todo lo que tiene(children, key, etc)
 
 def deleteCaso2y4(L,node): #node = L.value
-  parent = node.parent
+  newNode = node.parent
   deleteL(L,node)
-  if L == None:
-    if parent != None:
-      deleteCaso2y4(L,parent.value)
+  if L.head == None:
+    if newNode != None:
+      deleteCaso2y4(newNode.children,newNode)
   return True
-  
 
 
-  
-  
+"""Ejercicio 4
+Implementar un algoritmo que dado un árbol Trie T, un patrón p y un entero n, escriba todas 
+las palabras del árbol que empiezan por p y sean de longitud n. """
 
-   
+def buscoPatron(T,patron,n):
+  if T.root.children == None:
+    return None
+  else:
+    current = T.root.children.head
+    while current != None:
+      if current.value.key == patron:
+        lista = current.value.children
+        break
+      current = current.nextNode
+    if current == None:
+      return None
+  while current != None:
+    palabra = LinkedList()
+    enqueue(palabra, patron)
+    buscoPalabras(T,patron,n,lista,current,1,palabra)
+    current = current.nextNode
+  if current == None:
+    return 
+
+
+def buscoPalabras(T,patron,n,lista,current,cont,palabra):
+  while (cont != n) and (current != None):
+    current = current.value.children.head
+    enqueue(palabra,current.value.key)
+    return buscoPalabras(T,patron,n,lista,current,cont+1,palabra)
+
+  if current == None:
+    return
+  elif cont == n:
+    if current.value.isEndOfWord == True:
+      printLista(palabra)
+      return
+    else:
+      return 
+  else:
+    return
+
+##return??
     
-
+"""Implementar un algoritmo que dado los Trie T1 y T2 devuelva True si estos pertenecen al mismo documento 
+y False en caso contrario. Se considera que un Trie pertenecen al mismo documento cuando:
+1.	Ambos Trie sean iguales (esto se debe cumplir)
+2.	Si la implementación está basada en LinkedList, considerar el caso donde las palabras hayan sido 
+insertadas en un orden diferente.
+En otras palabras, analizar si todas las palabras de T1 se encuentran en T2. 
+"""
 
