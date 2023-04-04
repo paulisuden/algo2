@@ -164,11 +164,19 @@ def deleteR(L,element,caracter):
 
 def deleteCaso2y4(L,node): #node = L.value
   newNode = node.parent
-  deleteL(L,node)
-  if L.head == None:
-    if newNode != None:
-      deleteCaso2y4(newNode.children,newNode)
+  #pregunto si la lista tiene un elemento o mas:
+  if newNode.children.head.nextNode == None:
+    if newNode.children.head != None: #pregunto si no es la root
+    #tiene un solo elemento
+      deleteL(newNode.children, node)
+      deleteCaso2y4(L,newNode)
+    else: return True
+  else:
+    #tiene más de un elemento:
+    deleteL(newNode.children, node)
   return True
+
+
 
 
 """Ejercicio 4
@@ -183,6 +191,7 @@ def buscoPatron(T,patron,n):
     while current != None:
       if current.value.key == patron:
         lista = current.value.children
+        current = lista.head
         break
       current = current.nextNode
     if current == None:
@@ -198,11 +207,13 @@ def buscoPatron(T,patron,n):
 
 def buscoPalabras(T,patron,n,lista,current,cont,palabra):
   while (cont != n) and (current != None):
-    current = current.value.children.head
     enqueue(palabra,current.value.key)
+    if cont != n-1:
+      lista = current.value.children
+      current = lista.head
     return buscoPalabras(T,patron,n,lista,current,cont+1,palabra)
 
-  if current == None:
+  if current == None and cont != n:
     return
   elif cont == n:
     if current.value.isEndOfWord == True:
@@ -215,11 +226,3 @@ def buscoPalabras(T,patron,n,lista,current,cont,palabra):
 
 ##return??
     
-"""Implementar un algoritmo que dado los Trie T1 y T2 devuelva True si estos pertenecen al mismo documento 
-y False en caso contrario. Se considera que un Trie pertenecen al mismo documento cuando:
-1.	Ambos Trie sean iguales (esto se debe cumplir)
-2.	Si la implementación está basada en LinkedList, considerar el caso donde las palabras hayan sido 
-insertadas en un orden diferente.
-En otras palabras, analizar si todas las palabras de T1 se encuentran en T2. 
-"""
-
