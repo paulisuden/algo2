@@ -222,7 +222,7 @@ def buscoPalabras(T,patron,n,lista,current,cont,palabra):
   else:
     return
 
-##return??
+#falta caso en que dos palabras de long 3 tengan el mismo patron
     
 """Implementar un algoritmo que dado los Trie T1 y T2 devuelva True si estos pertenecen al mismo documento 
 y False en caso contrario. Se considera que un Trie pertenecen al mismo documento cuando:
@@ -231,8 +231,8 @@ y False en caso contrario. Se considera que un Trie pertenecen al mismo document
 insertadas en un orden diferente.
 En otras palabras, analizar si todas las palabras de T1 se encuentran en T2. 
 """
-#cada vez que hallo una palabra en T1, la busco en T2, si es True, continúo y si no, paro y no son identicos
-
+#recorrerTrie, recorre el arbol completo y guarda sus palabras en una LinkedList
+#mi funcion recorrerTrieR tiene una complejidad de n^2 ya que dentro de un bucle while llamo a la funcion recursiva n veces.
 def recorrerTrie(T1):
   listaPalabras = LinkedList()
   recorrerTrieR(T1.root.children.head,"",listaPalabras)
@@ -257,7 +257,8 @@ def recorrerTrieR(current,palabra,lista):
       recorrerTrieR(current.value.children.head,palabra,lista) #paso a la siguiente lista
       current = current.nextNode 
       palabra = palabra1
-  
+
+# arbolesIdenticos busca en T2 las palabras de T1 que anteriormente las agregue a una lista.
 def arbolesIdenticos(T1,T2):
   lista = recorrerTrie(T1)
   print("Lista palabras T1:")
@@ -280,6 +281,58 @@ Dos cadenas son invertidas si se leen de izquierda a derecha y contiene los mism
 derecha a izquierda, ej: abcd y dcba son cadenas invertidas, gfdsa y asdfg son cadenas invertidas, sin embargo
 abcd y dcka no son invertidas ya que difieren en un carácter."""
 
+def cadenasInvertidas(T3):
+  listaPalabras = LinkedList()
+  palabraInvertida = False
+  return cadenasInvertidasR(T3,T3.root.children.head,"",listaPalabras,palabraInvertida)
+
+def cadenasInvertidasR(T3,current,palabra,lista,palabraInvertida):
+  #CASOS BASE: deberia terminar de ejecutarse??????????
+  if palabraInvertida == True:
+    return print("True")
+  
+  elif current == None:
+    return False
+
+  if current.nextNode is None: #es hijo único:
+    palabra += current.value.key
+    if current.value.isEndOfWord == True: #si es un nodo hoja, agrego la palabra a la lista
+      palabraInv = ""
+      m = len(palabra)-1
+      for i in range(0,len(palabra)):
+        palabraInv += palabra[m-i]
+      palabraInvertida = search(T3,palabraInv)
+      if palabraInvertida != True:
+        palabra = ""
+      else:
+        print(palabraInv)
+        print(palabra)
+      
+    cadenasInvertidasR(T3,current.value.children.head,palabra,lista,palabraInvertida) #paso a la siguiente lista
+
+  else: #no es hijo unico
+    while current is not None:
+      palabra += current.value.key
+      if current.value.isEndOfWord == True: #si es un nodo hoja, agrego la palabra a la lista
+        palabraInv = ""
+        for i in range(len(palabra)-1,0):
+          palabraInv += palabra[i]  
+        palabraInvertida = search(T3,palabraInv)
+        if palabraInvertida != True:
+          palabra = ""
+        else:
+          print(palabraInv)
+          print(palabra)
+          break
+      cadenasInvertidasR(T3,current.value.children.head,palabra,lista,palabraInvertida) #paso a la siguiente lista
+      current = current.nextNode 
+
+"""EJERCICIO 7: Implementar la función autoCompletar(Trie, cadena) dentro del módulo trie.py, 
+que dado el árbol Trie T y la cadena “pal” devuelve la forma de auto-completar la palabra. Por ejemplo, 
+para la llamada autoCompletar(T, ‘groen’) devolvería “land”, ya que podemos tener “groenlandia” o 
+“groenlandés” (en este ejemplo la palabra groenlandia y groenlandés pertenecen al documento que representa 
+el Trie). Si hay varias formas o ninguna, devolvería la cadena vacía. Por ejemplo, autoCompletar(T, ma’) 
+devolvería “” si T presenta las cadenas “madera” y “mama”. """
 
     
 

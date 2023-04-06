@@ -24,6 +24,7 @@ print(delete(T,String("Pa")))
 print(search(T,String("Pa")))
 
 #Ejercicio 4
+
 insert(T,String("Put"))
 insert(T,String("Pet"))
 insert(T,String("Pita"))
@@ -32,6 +33,7 @@ insert(T,String("Pau"))
 buscoPatron(T,"P",3)
 
 #Ejercicio 5
+
 T1 = Trie()
 T1.root = TrieNode()
 insert(T1,String("corazon"))
@@ -49,4 +51,17 @@ insert(T2,String("holanda"))
 insert(T2,String("corazon"))
 print(arbolesIdenticos(T1,T2))
 
-     
+#Ejercicio 6
+
+print("")
+print("¿Cadenas Invertidas?")
+T3 = Trie()
+T3.root = TrieNode()
+insert(T3,String("abcd"))
+insert(T3,String("fdsa"))
+insert(T3,String("holi"))
+insert(T3,String("dcba"))
+insert(T3,String("asdf"))
+print(cadenasInvertidas(T3))
+
+#Ejercicio 7
