@@ -28,15 +28,7 @@ def insert(T,element):
   #La lista no esta creada
   if T.root.children == None:
   #creo la lista 
-  #inserto el primer caracter (0)
     T.root.children = LinkedList()
-    """    node = TrieNode()
-    node.parent = T.root
-    node.key = element[0]
-    node.children = LinkedList()
-    add(T.root.children, node)"""
-    #asigno L a la lista que voy a recorrer ahora
-    #L = T.root.children
   #funcion recursiva que insertara el resto de los caracteres
   insertR(T.root.children,element,0,T.root)
 
@@ -181,48 +173,55 @@ def deleteCaso2y4(L,node): #node = L.value
 Implementar un algoritmo que dado un árbol Trie T, un patrón p y un entero n, escriba todas 
 las palabras del árbol que empiezan por p y sean de longitud n. """
 
-def buscoPatron(T,patron,n):
+def buscoPatron(T,prefijo,n):
+  long=len(prefijo)
   if T.root.children == None:
     return None
   else:
     current = T.root.children.head
-    while current != None:
-      if current.value.key == patron:
-        lista = current.value.children
-        current = lista.head
-        break
-      current = current.nextNode
-    if current == None:
-      return None
-  while current != None:
-    palabra = LinkedList()
-    enqueue(palabra, patron)
-    buscoPalabras(T,patron,n,lista,current,1,palabra)
-    current = current.nextNode
+    i = 0
+    #Busco el patrón
+    while current != None and i < long:
+      if current.value.key == prefijo[i]:
+        current = current.value.children.head
+        i+=1
+      elif i < long:
+        current = current.nextNode
   if current == None:
-    return 
-
-
-def buscoPalabras(T,patron,n,lista,current,cont,palabra):
-  while (cont != n) and (current != None):
-    enqueue(palabra,current.value.key)
-    if cont != n-1:
-      lista = current.value.children
-      current = lista.head
-    return buscoPalabras(T,patron,n,lista,current,cont+1,palabra)
-
-  if current == None and cont != n:
-    return
-  elif cont == n:
-    if current.value.isEndOfWord == True:
-      printLista(palabra)
-      return
-    else:
-      return 
+    return None
   else:
-    return
+    lista =LinkedList()
+    buscoPalabras(0,current,prefijo,lista,n-1)
+    return lista
+  
+def buscoPalabras(cont,current,palabra,lista,n):
+  if current == None:
+    return lista
 
-#falta caso en que dos palabras de long 3 tengan el mismo patron
+  if current.nextNode is None: #es hijo único:
+    palabra += current.value.key
+    cont+=1
+    if cont == n and current.value.isEndOfWord == True: #si es un nodo hoja, agrego la palabra a la lista
+      add(lista,palabra)
+    elif cont == n and current.value.isEndOfWord != True: 
+      current.value.children.head = None
+      cont = 0
+    buscoPalabras(cont,current.value.children.head,palabra,lista,n) #paso a la siguiente lista
+
+  else: #no es hijo unico
+    palabra1 = palabra #guardo cadena hasta donde es hijo unico (ej, guardo "co": "corazon" y "como")
+    while current is not None:
+      palabra += current.value.key
+      cont += 1
+      if cont == n and current.value.isEndOfWord == True: #si es un fin de palabra, agrego la palabra a la lista
+        add(lista,palabra)
+      elif cont == n and current.value.isEndOfWord != True: 
+        current = current.value.children.head
+        cont = 0
+      buscoPalabras(cont,current.value.children.head,palabra,lista,n) #paso a la siguiente lista
+      current = current.nextNode 
+      palabra = palabra1
+      cont = len(palabra)-1
     
 """Implementar un algoritmo que dado los Trie T1 y T2 devuelva True si estos pertenecen al mismo documento 
 y False en caso contrario. Se considera que un Trie pertenecen al mismo documento cuando:
@@ -252,7 +251,7 @@ def recorrerTrieR(current,palabra,lista):
     palabra1 = palabra #guardo cadena hasta donde es hijo unico (ej, guardo "co": "corazon" y "como")
     while current is not None:
       palabra += current.value.key
-      if current.value.isEndOfWord == True: #si es un nodo hoja, agrego la palabra a la lista
+      if current.value.isEndOfWord == True: #si es un fin de palabra, agrego la palabra a la lista
         add(lista,palabra)
       recorrerTrieR(current.value.children.head,palabra,lista) #paso a la siguiente lista
       current = current.nextNode 
@@ -334,6 +333,40 @@ para la llamada autoCompletar(T, ‘groen’) devolvería “land”, ya que pod
 el Trie). Si hay varias formas o ninguna, devolvería la cadena vacía. Por ejemplo, autoCompletar(T, ma’) 
 devolvería “” si T presenta las cadenas “madera” y “mama”. """
 
-    
+def autoCompletar(T,prefijo):
+  long=len(prefijo)
+  if T.root.children == None:
+    return None
+  else:
+    current = T.root.children.head
+    i = 0
+    #Busco el patrón
+    while current != None and i < long:
+      if current.value.key == prefijo[i]:
+        current = current.value.children.head
+        i+=1
+      elif i < long:
+        current = current.nextNode
+  if current == None:
+    return None
+  
+  #completo palabra
+  palabra = ""
+  if current.nextNode != None:
+    return None
+  
+  while current != None and current.nextNode == None: #mientras sea hijo unico
+    palabra += current.value.key
+    current = current.value.children.head
+
+  #si current == None entonces la palabra se completo totalmente.
+  if current == None:
+    return palabra
+  
+  #si no es hijo unico corto y devuelvo hasta donde lo fue.
+  elif current.nextNode != None:
+    return palabra
+
+
 
 

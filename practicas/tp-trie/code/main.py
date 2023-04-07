@@ -24,15 +24,17 @@ print(delete(T,String("Pa")))
 print(search(T,String("Pa")))
 
 #Ejercicio 4
+print("")
+print("Ejercicio 4: busco palabras con patron P")
 
 insert(T,String("Put"))
 insert(T,String("Pet"))
 insert(T,String("Pita"))
 insert(T,String("Pan"))
 insert(T,String("Pau"))
-buscoPatron(T,"P",3)
+printLista(buscoPatron(T,"P",3))
 
-#Ejercicio 5
+"""#Ejercicio 5
 
 T1 = Trie()
 T1.root = TrieNode()
@@ -44,11 +46,11 @@ insert(T1,String("hola"))
 
 T2 = Trie()
 T2.root = TrieNode()
-insert(T2,String("hola"))
 insert(T2,String("como"))
 insert(T2,String("andas"))
-insert(T2,String("holanda"))
 insert(T2,String("corazon"))
+insert(T2,String("holanda"))
+insert(T2,String("hola"))
 print(arbolesIdenticos(T1,T2))
 
 #Ejercicio 6
@@ -65,3 +67,22 @@ insert(T3,String("asdf"))
 print(cadenasInvertidas(T3))
 
 #Ejercicio 7
+
+print("")
+print("Autocompletar")
+T7 = Trie()
+T7.root = TrieNode()
+insert(T7,String("groenlandia"))
+insert(T7,String("groenlandes"))
+insert(T7,String("madera"))
+insert(T7,String("mamá"))
+insert(T7,String("semaforo"))
+print("Autocompletar ma (madera y mamá)")
+cadena = "ma"
+print(autoCompletar(T7,cadena))
+print("Autocompletar groen (groenlandia y groenlandes)")
+cadena = "groen"
+print(autoCompletar(T7,cadena))
+print("Autocompletar sem (semaforo)")
+cadena = "sem"
+print(autoCompletar(T7,cadena))"""
