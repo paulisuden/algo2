@@ -336,7 +336,7 @@ propuesto?"""
 
 def S_subcjo_T(s,t):
 
-    m = 7 #nro primo
+    m = 19 #nro primo
     dic = [None]*m
 
     for i in range (0,len(t)):
@@ -346,7 +346,7 @@ def S_subcjo_T(s,t):
         subcjo = search1(m,dic,s[i])
         if subcjo == None:
             break
-    printDic(dic)
+        
     if subcjo == None: return False
     else: return True
 
