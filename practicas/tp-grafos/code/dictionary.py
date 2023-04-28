@@ -36,7 +36,19 @@ def insertInOrder(dic, key, value):
         addDic(dic[key],key,value)
     return dic 
 
+def insertInOrderBFS(BFS, i, key, value):
+    #Inserta en el diccionario del nivel 0(hijos de raiz) al n
+    if BFS[i] == None: 
+        #creo una lista                                        
+        L = dictionary()
+        addDic(L,key,value)                               
+        BFS[i] = L                                           
+    else: #encadenamiento
+        addDic(BFS[i],key,value)
+    return BFS 
+
 def searchGrafo(dic,key,value):
+    #busca si hay una arista entre (key,value)
     if dic[key] == None:
         return False
     else: #busco key
@@ -50,7 +62,16 @@ def searchGrafo(dic,key,value):
         else:
             return True
 
-            
+def searchPos(dic,key):    #busco el slot en donde se encuentra determinada key
+    pos = 0
+    current = dic[pos].head
+    while dic[pos] != None:
+        if current.key == key:
+            return pos
+            break
+        pos += 1
+    if dic[pos] == None:
+        return None         
 
 
 

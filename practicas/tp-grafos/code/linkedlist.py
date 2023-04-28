@@ -90,12 +90,15 @@ def delete(L,element):
     return position
 
 def length(L):
-  current = L.head
-  contador = 0
-  while current != None:
-    current = current.nextNode
-    contador += 1
-  return contador
+  if L != None:
+    current = L.head
+    contador = 0
+    while current != None:
+      current = current.nextNode
+      contador += 1
+    return contador
+  else:
+    return 0
 
 def access(L,position):
   current = L.head
