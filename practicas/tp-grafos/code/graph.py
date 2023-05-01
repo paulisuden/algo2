@@ -1,6 +1,7 @@
 from dictionary import *
 from myqueue import *
 from linkedlist import *
+from mystack import *
 """Ejercicio 1
 Implementar la función crear grafo que dada una lista de vértices y una lista de aristas cree un grafo con la representación por 
 Lista de Adyacencia.
@@ -43,36 +44,17 @@ def createGraphx1(LV, LA): #representa la arista(v,w) en una sola lista de ady (
     return grafo
 
 #EJERCICIO 2
-"""def existPath(Grafo, v1, v2): 
+"""Implementar la función que responde a la siguiente especificación.
+def existPath(Grafo, v1, v2): 
 Descripción: Implementa la operación existe camino que busca si existe un camino entre los vértices v1 y v2 
 Entrada: Grafo con la representación de Lista de Adyacencia, v1 y v2 vértices en el grafo.
 Salida: retorna True si existe camino entre v1 y v2, False en caso contrario."""
 
-        
-"""def existPath(grafo, v1, v2):
-    if grafo[v1] == None:  #si v1 no esta conectado con ningun vértice
-        return False
-    else:
-
-        L = grafo[v1]
-        current = L.head
-
-    if searchGrafo(grafo,v1,v2) == True:
-        return True
-    else:
-        long = length(L)
-        for i in range(0,long):
-            new_v1 = current.value
-            print(new_v1)
-            if searchGrafo(grafo,new_v1,v2) == True:
-                return True
-                break
-            else:
-
-                existPath(grafo, new_v1, v2)
-                current = current.nextNode"""
-
-
+def existPath(grafo, v1, v2): 
+    dfs = convertToDFSTree(grafo,v1)
+    #busco en key = 0 porque esa es la posicion en el slot en donde voy a encontrar el arbol con raiz v1
+    path = searchGrafo(dfs,0,v2)
+    return path
 
 """Ejercicio 3
 Implementar la función que responde a la siguiente especificación.
@@ -107,14 +89,15 @@ Salida: retorna True si el grafo es un árbol.
 """
 def isTree(grafo): 
     ciclo = convertToBFSTree_CICLO(grafo, 1)
-    if ciclo == True:
-        return False
-    elif ciclo == False:
+    if length(ciclo) == 0:
         return True
+    else:
+        return False
     
 #misma funcion para convertir a un bfs solo que me devuelve si hay ciclo o no en vez de la lista BFS
 def convertToBFSTree_CICLO(grafo, v):
-    ciclo = False
+    #ciclo = False
+    ciclo = LinkedList()
     long = len(grafo)+1
     #nuevo diccionario para guardar los vertices con su color, distancia y padre
     vertices = [None]*(long)
@@ -160,9 +143,9 @@ def convertToBFSTree_CICLO(grafo, v):
                 addInOrder(BFS,key)
 
             elif currentVertices.value == "g":
-                currentVertices.nextNode.nextNode.nextNode.value = True #hay ciclo (arco de retroceso)   
-                ciclo = True
-                break
+                currentVertices.nextNode.nextNode.nextNode.value = True #hay ciclo (arco de retroceso)  
+                add(ciclo,(u,key)) 
+                #ciclo = True
                        
             currentGrafo= currentGrafo.nextNode
 
@@ -188,7 +171,17 @@ def isComplete(grafo):
             break
     return True
 
-
+#EJERCICIO 6
+"""Implementar una función que dado un grafo devuelva una lista de aristas que si se eliminan el grafo se convierte en un árbol. 
+Respetar la siguiente especificación. 
+def convertTree(Grafo)
+Descripción: Implementa la operación es convertir a árbol 
+Entrada: Grafo con la representación de Lista de Adyacencia.
+Salida: LinkedList de las aristas que se pueden eliminar y el grafo resultante se convierte en un árbol.
+"""
+def convertTree(grafo):
+    lista = convertToBFSTree_CICLO(grafo, 0)
+    return lista
 
 #EJERCICIO 7
 """Parte 2
@@ -210,10 +203,6 @@ def countConnections(grafo):
         if dfs[i] != None:
             cant += 1
     return cant
-
-
-
-
 
 
 #EJERCICIO 8
@@ -361,6 +350,9 @@ def convertToDFSTreeR(grafo,u,vertices,j,time,DFS,arcosRetroceso,arcosRetroceso_
                 insertInOrder(arcosRetroceso, u, key)
             #ARCO AVANCE O CRUCE
             elif vertices[key].head.value == "black":
+                #si una arista de avance o cruce conecta dos componentes conexos quiere decir que existe una ruta entre ellos que NO pasa
+                #por la raíz del arbol DFS
+                
                 #Son aristas (u,v) que no son parte del árbol y conectan u a un descendiente v (vértice sucesor).
                 if vertices[u].head.nextNode.value < vertices[key].head.nextNode.value:
                     insertInOrder(arcoAvance, u, key)
@@ -390,45 +382,9 @@ Descripción: Encuentra el camino más corto, en caso de existir, entre dos vér
 Entrada: Grafo con la representación de Lista de Adyacencia, v1 y v2 vértices del grafo.
 Salida: retorna la lista de vértices que representan el camino más corto entre v1 y v2. La lista resultante contiene al inicio a v1 y al final a v2. 
 En caso de que no exista camino se retorna la lista vacía.
-Con bfs
-"""
-def bestRoad(grafo, v1, v2):
-    bfs = bestRoad_BFS(grafo, v1)
-    printDic(bfs)
-    L = LinkedList()
-    add(L,v1)
-    camino = bestRoad_R(bfs, v1, v2,L)
-    return camino
-
-def bestRoad_R(bfs, v1, v2,lista):
-    pos = searchPos(bfs,v1)
-    if bfs[pos] == None:  #si v1 no esta conectado con ningun vértice
-        """listaVacia = LinkedList()
-        add(listaVacia,"None")"""
-        return lista
-    else:
-        L = bfs[pos]
-        current = L.head
-    if searchGrafo(bfs,pos,v2) == True:
-        add(lista,v1)
-        add(lista,v2)
-        return lista
-    else:
-        long = length(L)
-        for i in range(0,long):
-            new_v1 = current.value
-            if searchGrafo(bfs,new_v1,v2) == True:
-                add(lista,new_v1)
-                add(lista,v2)
-                return lista
-                break
-            else:
-                bestRoad_R(bfs, new_v1, v2,lista)
-                current = current.nextNode
-            printLista(lista)
-        return LinkedList()
-
-def bestRoad_BFS(grafo, v):
+Con bfs"""
+def BFS_Vertices(grafo, v):
+        ciclo = False
         long = len(grafo)+1
         #nuevo diccionario para guardar los vertices con su color, distancia y padre
         vertices = [None]*(long)
@@ -475,8 +431,85 @@ def bestRoad_BFS(grafo, v):
                     currentVertices.nextNode.nextNode.value = u #padre
                     enqueue(Q,key)
                     insertInOrderBFS(BFS, j, u, key)
+                elif currentVertices.value == "g":
+                    currentVertices.nextNode.nextNode.nextNode.value = True #hay ciclo (arco de retroceso)   
+                    ciclo = True
+                        
+                currentGrafo= currentGrafo.nextNode
+
+            vertices[u].head.value = "b" #termino de visitar todos los nodos adyacentes a u 
+        return vertices
+
+def convertToBFSTree_NoConexo(grafo, v):
+
+        ciclo = False
+        long = len(grafo)+1
+        #nuevo diccionario para guardar los vertices con su color, distancia y padre
+        vertices = [None]*(long)
+        #key = i, color vértice = w, distancia = None, padre = None
+        #en una hash, en la posicion del numero del vertice, añado a la lista los datos anteriores
+        for i in range (0,long):
+            value = False
+            insertInOrder(vertices, i, value) #inserto arco de retroceso (ciclo)       
+            value = None
+            insertInOrder(vertices, i, value) #inserto padre
+            value = None
+            insertInOrder(vertices, i, value) #inserto distancia
+            value = "w"
+            insertInOrder(vertices, i, value) #inserto color
+
+        #al vertice v le doy color = grey, distancia = 0 y padre = None ya esta predefinido antes
+        vertices[v].head.value= "g"
+        vertices[v].head.nextNode.value= 0
+        
+        #contador de niveles en el arbol
+        j = -1
+
+        #creo lista BFS donde voy a ir "armando" el arbol y Q donde voy a encolar y desencolar los vertices
+
+        BFS = [None]*long
+        Q = LinkedList()
+
+        #encolo el primer vertice a Q
+        enqueue(Q,v)
+
+        while Q.head != None:
+            j += 1
+            u = dequeue(Q)
+            #voy a recorrer la lista de adyacencia del vertice u en la hash
+            currentGrafo = grafo[u].head
+            long = length(grafo[u])
+
+            for i in range(0,long):
+                key = currentGrafo.value
+                currentVertices = vertices[key].head
+                if currentVertices.value == "w":
+                    currentVertices.value = "g" #color
+                    currentVertices.nextNode.value = (vertices[u].head.nextNode.value + 1) #distancia
+                    currentVertices.nextNode.nextNode.value = u #padre
+                    enqueue(Q,key)
+                    insertInOrderBFS(BFS, j, u, key)
+                elif currentVertices.value == "g":
+                    currentVertices.nextNode.nextNode.nextNode.value = True #hay ciclo (arco de retroceso)   
+                    ciclo = True
                         
                 currentGrafo= currentGrafo.nextNode
 
             vertices[u].head.value = "b" #termino de visitar todos los nodos adyacentes a u 
         return BFS
+    
+
+def bestRoad(grafo,s,v):
+    vertices = BFS_Vertices(grafo,s)
+    bestRoad_R(s,v,vertices)
+
+def bestRoad_R(s,v,vertices):
+    if v == s:
+        print(s)
+        return 
+    elif vertices[v].head.nextNode.nextNode.value == None:
+        return print(None)
+    else:
+        bestRoad_R(s,vertices[v].head.nextNode.nextNode.value,vertices)
+        print(v)
+

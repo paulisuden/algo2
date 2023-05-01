@@ -33,6 +33,7 @@ def insert(T,element):
   insertR(T.root.children,element,0,T.root)
 
 def insertR(L, palabra, caracter,parent):
+  
   #caso base
   if caracter == len(palabra): 
     return

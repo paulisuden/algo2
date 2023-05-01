@@ -47,6 +47,19 @@ def insertInOrderBFS(BFS, i, key, value):
         addDic(BFS[i],key,value)
     return BFS 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 def searchGrafo(dic,key,value):
     #busca si hay una arista entre (key,value)
     if dic[key] == None:
@@ -64,13 +77,15 @@ def searchGrafo(dic,key,value):
 
 def searchPos(dic,key):    #busco el slot en donde se encuentra determinada key
     pos = 0
-    current = dic[pos].head
-    while dic[pos] != None:
+    long = len(dic)
+    while pos < long:
+        if dic[pos] != None:
+            current = dic[pos].head
         if current.key == key:
             return pos
             break
         pos += 1
-    if dic[pos] == None:
+    if pos == long:
         return None         
 
 
