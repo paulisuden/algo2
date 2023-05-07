@@ -1,7 +1,6 @@
 from dictionary import *
 import math
 
-
 m = 7
 dic = [None]*m
 insert1(m,dic,5,"cinco")

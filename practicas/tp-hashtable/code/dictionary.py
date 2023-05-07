@@ -90,7 +90,7 @@ Entrada: El diccionario sobre el cual se quiere realizar la búsqueda (dictionar
 Salida: Devuelve el value de la key.  Devuelve None si el key no se encuentra."""
 
 def search1(m,dic,key):
-    pos = key % m #funcion hash (k mod m)
+    pos = key % m #metodo division
     if dic[pos] == None:
         return None
     else: #busco key
@@ -125,7 +125,7 @@ Entrada: El diccionario sobre el que se quiere realizar la eliminación y el val
 Salida: Devuelve D"""
 
 def delete(m,dic,key):
-    pos = key % m #funcion hash (k mod m)
+    pos = key % m #metodo division
     if dic[pos] == None:
         return None
     else: #busco key                                   
@@ -141,7 +141,8 @@ def delete(m,dic,key):
 
 """Ejercicio 4
 Implemente un algoritmo lo más eficiente posible que devuelva True o False a la siguiente proposición: dado dos strings s1...sk  y p1...pk, 
-se quiere encontrar si los caracteres de p1...pk corresponden a una permutación de s1...sk. Justificar el coste en tiempo de la solución propuesta.
+se quiere encontrar si los caracteres de p1...pk corresponden a una permutación de s1...sk. Justificar el coste en tiempo de la solución 
+propuesta.
 
 Ejemplo 1:
 Entrada: S = ‘hola’ , P = ‘ahlo’

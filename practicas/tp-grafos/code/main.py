@@ -82,3 +82,60 @@ LV = [0,1,2,3,4]
 LA = [(0,1),(1,2),(2,3),(3,4)]
 grafo10 = createGraphx2(LV, LA)
 bestRoad(grafo10,0,4)
+
+
+#######################################################         PARTE TRES         #############################################################
+
+print("")
+print("PARTE TRES")
+print("REPRESENTACIÓN GRAFO CON MATRIZ DE ADYACENCIA")
+LV = [0,1,2,3]
+LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4)]
+matriz1 = graph_Matriz(LV, LA)
+printMatriz(matriz1)
+AACM = PRIM(matriz1)
+print("AACM:")
+printLista(AACM)
+
+
+print("REPRESENTACIÓN GRAFO CON MATRIZ DE ADYACENCIA")
+LV = [0,1,2,3,4,5]
+LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4),(0,5,3),(2,4,3)]
+matriz2 = graph_Matriz(LV, LA)
+printMatriz(matriz2)
+print("REPRESENTACIÓN PRIM")
+AACM = PRIM(matriz2)
+print("AACM:")
+printLista(AACM)
+
+print("REPRESENTACIÓN GRAFO CON MATRIZ DE ADYACENCIA")
+LV = [0,1,2,3,4,5]
+LA = [(4,5,6),(2,4,6),(0,1,6),(1,2,5),(0,3,5),(2,5,4),(1,4,3),(3,5,2),(0,2,1)]
+matriz3 = graph_Matriz(LV, LA)
+printMatriz(matriz3)
+print("REPRESENTACIÓN KRUSKAL")
+AACM = KRUSKAL(matriz3)
+printLista(AACM)
+
+print("REPRESENTACIÓN GRAFO CON MATRIZ DE ADYACENCIA")
+LV = [0,1,2,3,4,5]
+LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4),(0,5,3),(2,4,3)]
+matriz2 = graph_Matriz(LV, LA)
+printMatriz(matriz2)
+print("REPRESENTACIÓN KRUSKAL")
+AACM = KRUSKAL(matriz2)
+printLista(AACM)
+
+
+print("REPRESENTACIÓN GRAFO CON MATRIZ DE ADYACENCIA")
+LV = [0,1,2,3,4,5]
+LA = [(0,1,10),(1,2,1),(1,3,2),(0,3,5),(2,4,4),(3,1,3),(3,2,9),(3,4,2),(4,0,7),(4,2,6)]
+matriz4 = graph_Matriz_D(LV, LA)
+printMatriz(matriz4)
+print("REPRESENTACIÓN dijkstra")
+AACM = shortestPath(matriz4,0,4)
+if AACM != None:
+    printLista(AACM)
+else:
+    print(None)
+

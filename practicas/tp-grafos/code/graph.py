@@ -2,6 +2,7 @@ from dictionary import *
 from myqueue import *
 from linkedlist import *
 from mystack import *
+import math
 """Ejercicio 1
 Implementar la función crear grafo que dada una lista de vértices y una lista de aristas cree un grafo con la representación por 
 Lista de Adyacencia.
@@ -507,9 +508,345 @@ def bestRoad_R(s,v,vertices):
     if v == s:
         print(s)
         return 
-    elif vertices[v].head.nextNode.nextNode.value == None:
+    elif vertices[v].head.nextNode.nextNode.value == None: #si padre == None
         return print(None)
     else:
         bestRoad_R(s,vertices[v].head.nextNode.nextNode.value,vertices)
         print(v)
+
+#LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4)]
+#LV = [0,1,2,3]
+def graph_Matriz(LV, LA): 
+    #los dos primeros componentes de las aristas me dice los vertices que se unen y el tercer componente el costo de la misma
+    #ejemplo: #LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4)]
+    matriz = Array(len(LV),Array(len(LV),0))
+    long = len(LA)
+    for f in range(0,long):
+        i = LA[f][0]
+        j = LA[f][1]
+        value = LA[f][2]
+        matriz[i][j] = value
+        matriz[j][i] = value    
+
+    for i in range(0,len(LV)):
+        for j in range(0,len(LV)):  
+            if matriz[i][j] == None:
+                matriz[i][j] = 0         
+    return matriz 
+
+
+def printMatriz(matrix):
+  filas = len(matrix)
+  columnas = filas
+
+  for i in range(0, filas):
+    print("|", end="  ")
+    for j in range(0, columnas):
+      print(matrix[i][j], end="  ")
+    print("|")
+
+#######################################################         PARTE TRES         #############################################################
+#EJERCICIO 14 -------- PRIM
+"""
+Ejercicio 14
+Implementar la función que responde a la siguiente especificación.
+def PRIM(Grafo): 
+Descripción: Implementa el algoritmo de PRIM 
+Entrada: Grafo con la representación de Matriz de Adyacencia.
+Salida: retorna el árbol abarcador de costo mínimo"""
+
+
+def PRIM(g):
+    arista = buscoAristas(g) #aristas del grafo de menor a mayor costo
+
+    long = len(g)
+    inicial = [None]*long
+    for i in range(0,len(g)):  #guardo los vertices en un array
+        inicial[i] = i  
+
+    final = LinkedList()
+    AACM = LinkedList()
+
+    while len(inicial) != length(final):
+        if length(final) == 0:
+            #primera vez: saco la arista de menor costo y agrego a lista final y elimino de lista incicial los vertices
+            u = dequeue_priority(arista)
+            add(final,u[0])
+            add(final,u[1])
+            inicial[u[0]] = -1
+            inicial[u[1]] = -1
+            nueva_arista = u 
+        else:
+            #BUSCO PROXIMA ARISTA DE MENOR COSTO QUE TENGA COMO VERTICE ALGUN VERTICE DE LA LISTA FINAL
+            nueva_arista = busco_proxima_arista(inicial,final,arista)
+            if nueva_arista != None:
+                #LA ARISTA QUE OBTUVE LA ELIMINO DE LA LISTA "ARISTA"
+                delete(arista,nueva_arista)      
+            else:
+                return AACM
+                break
+
+        add(AACM,nueva_arista)
+    return AACM    
+
+def buscoAristas(g): #aristas ordenadas de menor a mayor costo
+    long = math.trunc(len(g))
+    Q = LinkedList()
+    for i in range (0,long):  
+        for j in range(0,long):
+            if i != j: 
+                if j>i:
+                    if g[i][j] != 0:
+                        enqueue_priority(Q,(i,j),g[i][j])
+                        
+    return Q
+
+def busco_proxima_arista(inicial,final,arista):
+    currentA = arista.head
+    longA = length(arista)
+    longF = length(final)
+
+    for i in range(0,longA):
+        currentF = final.head
+        for i in range(0,longF):
+            #busco la primer arista que me aparezca de menor costo 
+            if (currentA.value[0] == currentF.value):
+                if inicial[currentA.value[1]] != -1:
+                    arista = currentA.value
+                    inicial[arista[1]] = -1   
+                    add(final,arista[1])
+                    return arista 
+                    break
+            elif (currentA.value[1] == currentF.value):
+                if inicial[currentA.value[0]] != -1:
+                    arista = currentA.value
+                    inicial[arista[0]] = -1 
+                    add(final,arista[0])
+                    return arista
+                    break
+            currentF = currentF.nextNode
+        currentA = currentA.nextNode
+    return None
+
+
+#EJERCICIO 15 -------- KRUSKAL
+"""Ejercicio 15
+Implementar la función que responde a la siguiente especificación.
+def KRUSKAL(Grafo): 
+Descripción: Implementa el algoritmo de KRUSKAL 
+Entrada: Grafo con la representación de Matriz de Adyacencia.
+Salida: retorna el árbol abarcador de costo mínimo
+
+
+MST-KRUSKAL(G; w)
+1 A D ;
+2 for each vertex  2 G:V
+3 MAKE-SET./
+4 sort the edges of G:E into nondecreasing order by weight w
+5 for each edge .u; / 2 G:E, taken in nondecreasing order by weight
+6 if FIND-SET.u/ ¤ FIND-SET./
+7 A D A [ f.u; /g
+8 UNION.u; /
+9 return A
+
+"""
+def inicializarVertices(vertices,long):
+    for i in range(0,long):
+        vertices[i] = i
+    return 
+
+def KRUSKAL(g):
+    #ordeno aristas por costo (menor a mayor)
+    arista = buscoAristas(g)
+    aacm = LinkedList()
+    long = len(g)
+
+    #PRIMERO: armo los arboles por separado
+        #(inicializo vertices para armar bosque)
+    vertices = [None]*long
+    inicializarVertices(vertices,long)
+    bosque(arista,aacm,vertices)
+
+    #en el array "union" voy a ir guardando los vertices que están unidos para evitar formar ciclos
+    union = [None]*long
+
+    current = arista.head
+    #para detener el while: para que sea un arbol aristas = v-1 (v = cant vertices)
+    cant_aristas = 0
+    #SEGUNDO: uno los arboles con las aristas de menor costo
+    while current != None and cant_aristas < long-1:
+        if cant_aristas == 0:
+            #primeros arboles que uno:
+            union[current.value[0]] = current.value[0]
+            union[current.value[1]] = current.value[1]       
+            searchPareja(union,aacm,current.value)
+        else: 
+            if union[current.value[0]] != None and union[current.value[1]] == None:
+                add(aacm,current.value)
+                union[current.value[1]] = current.value[1]
+            elif union[current.value[0]] == None and union[current.value[1]] != None:
+                add(aacm,current.value)
+                union[current.value[0]] = current.value[0]
+
+        current = current.nextNode
+    return aacm  
+
+def bosque(arista,aacm,vertices):  
+    current = arista.head
+
+    for i in range(0,len(vertices)):
+        a =current.value[0]
+        b= current.value[1]
+        if vertices[a] != -1 and vertices[b] != -1:
+            add(aacm,current.value)
+            delete(arista,current.value)
+            vertices[a] = -1
+            vertices[b] = -1
+        current = current.nextNode
+    return 
+
+def searchPareja(union,aacm,element):
+    #añado al array union los vertices que utilizo en el primer caso (cuyas aristas ya estan añadidas en el aacm de antes: 
+    #funcion bosque)
+    current = aacm.head
+    add(aacm,element)
+    while current != None:
+        if current.value[0] == element[0] or current.value[1] == element[0]:
+            if current.value[0] == element[0]:
+                union[current.value[1]] = current.value[1]
+                arbol = (element[0],current.value[1])
+
+            else:
+                union[current.value[0]] = current.value[0]
+                arbol = ( element[0],current.value[0])
+
+        elif current.value[0] == element[1] or current.value[1] == element[1]:
+            if current.value[0] == element[1]:
+                union[current.value[1]] = current.value[1]
+                arbol = (element[1],current.value[1])
+
+            else:
+                union[current.value[0]] = current.value[0]
+                arbol = (element[1],current.value[0])
+
+        current = current.nextNode
+    return 
+
+#######################################################         PARTE CINCO        #############################################################
+#EJERCICIO 21 -------- DIJKSTRA
+
+"""
+Implementar el Algoritmo de Dijkstra que responde a la siguiente especificación
+def shortestPath(Grafo, s, v): 
+Descripción: Implementa el algoritmo de Dijkstra
+Entrada: Grafo con la representación de Matriz de Adyacencia, vértice de inicio s y destino v.
+Salida: retorna la lista de los vértices que conforman el camino iniciando por s y terminando en v. 
+Devolver NONE en caso que no exista camino entre s y v.
+"""
+def graph_Matriz_D(LV, LA): 
+    #los dos primeros componentes de las aristas me dice los vertices que se unen y el tercer componente el costo de la misma
+    #ejemplo: #LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4)]
+    matriz = Array(len(LV),Array(len(LV),0))
+    long = len(LA)
+    for f in range(0,long):
+        i = LA[f][0]
+        j = LA[f][1]
+        value = LA[f][2]
+        print(i,j,value)
+        matriz[i][j] = value  
+
+    for i in range(0,len(LV)):
+        for j in range(0,len(LV)):  
+            if matriz[i][j] == None:
+                matriz[i][j] = 0         
+    return matriz 
+
+def initRelax(grafo,s): #distancia
+    vertice = [None]*len(grafo)
+    for i in range(0,len(grafo)):
+        if i != s:
+            vertice[i]=float('inf')
+        else:
+            vertice[i]=0
+    return vertice
+
+def initRelax2(grafo,s): #padre
+    vertice = [None]*len(grafo)
+    for i in range(0,len(grafo)):
+        if i != s:
+            vertice[i]=None
+    return vertice
+
+def minQueue(v):
+    Q = LinkedList()
+    for i in range (0,len(v)):
+        if v[i] != None:
+            current = Q.head
+            Node = PriorityNode()
+            Node.value = i        #vertice
+            Node.priority = v[i]  #distancia
+
+            priority = Node.priority
+            if current == None:
+                Q.head = Node
+
+            else:
+                if current.priority >= priority:
+                    Node.nextNode = current
+                    Q.head = Node
+
+                else: 
+                    if current.nextNode != None:
+                        while current.nextNode != None:
+                            if current.nextNode.priority <= priority:
+                                current = current.nextNode
+                            else:
+                                Node.nextNode = current.nextNode
+                                current.nextNode = Node
+                                break
+
+
+                    current.nextNode = Node
+
+    return Q
+
+
+def relax(grafo,vertice,u,v,verticeP):
+    if vertice[u] + grafo[u][v] < vertice[v]:
+        vertice[v]= vertice[u]+ grafo[u][v]
+        verticeP[v] = u
+    return
+
+def camino(verticeP,s,v):
+    if verticeP[v] == None:
+        return None
+    else:
+        llegada = v
+        camino = LinkedList()
+        add(camino,v)
+        while llegada != s:
+            llegada = verticeP[v]
+            add(camino,llegada)
+            v = llegada
+        return camino
+
+def shortestPath(grafo, s, v):
+    vertice = initRelax(grafo,s) #distancia
+    verticeP = initRelax2(grafo,s) #padre
+    verticeAux = vertice
+    visitado = [None]*len(grafo)
+    Q = minQueue(vertice)
+
+
+    while length(Q) > 0:
+        u = dequeue(Q)
+        for i in range(0,len(grafo)):
+            if grafo[u][i] != 0:
+                if visitado[i] == None:
+                    relax(grafo,vertice,u,i,verticeP)
+        visitado[u] = u
+        verticeAux[u] = None
+        Q = minQueue(verticeAux)
+
+    return camino(verticeP,s,v)
 

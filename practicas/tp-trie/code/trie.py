@@ -83,7 +83,7 @@ def search(T,element):
   if T.root.children == None:
      return False
   else:
-    return searchR(T.root.children,element, 0,)
+    return searchR(T.root.children,element, 0)
 
 def searchR(L,element,caracter):
   L = L.head
