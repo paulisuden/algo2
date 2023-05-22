@@ -514,6 +514,8 @@ def bestRoad_R(s,v,vertices):
         bestRoad_R(s,vertices[v].head.nextNode.nextNode.value,vertices)
         print(v)
 
+
+#######################################################         PARTE TRES         #############################################################
 #LA = [(0,1,1),(0,2,2),(1,3,3),(1,2,4),(0,3,4)]
 #LV = [0,1,2,3]
 def graph_Matriz(LV, LA): 
@@ -545,7 +547,6 @@ def printMatriz(matrix):
       print(matrix[i][j], end="  ")
     print("|")
 
-#######################################################         PARTE TRES         #############################################################
 #EJERCICIO 14 -------- PRIM
 """
 Ejercicio 14
@@ -597,10 +598,8 @@ def buscoAristas(g): #aristas ordenadas de menor a mayor costo
             if i != j: 
                 if j>i:
                     if g[i][j] != 0:
-                        enqueue_priority(Q,(i,j),g[i][j])
-                        
+                        enqueue_priority(Q,(i,j),g[i][j])                     
     return Q
-
 def busco_proxima_arista(inicial,final,arista):
     currentA = arista.head
     longA = length(arista)
