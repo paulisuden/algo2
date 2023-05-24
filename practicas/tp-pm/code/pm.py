@@ -106,7 +106,6 @@ def AEF(texto, patron):
     n = len(texto)
     m = len(patron)
     automata = construirAutomata(patron,m)
-    mostrarMatriz(automata)
     estado_actual = 0  #q
     for i in range(n):
         estado_actual = automata[estado_actual][ord(texto[i])]   # q = d(q,T[i])
@@ -117,5 +116,37 @@ def AEF(texto, patron):
         return print("None")
 
 
+#EJERCICIO 14                       KMP
 
+def KMP(t,p):
+    n = len(t)
+    m = len(p)
+    pi = computePrefixFunction(p)
+    q = 0
+    for i in range(0,n):
+        while q > 0 and p[q] != t[i]:
+            q = pi[q-1]
+        if p[q] == t[i]:
+            q += 1
+        if q == m:
+            print("Pattern occurs with shift", i-m+2)
+            #q = pi[q]   -----> en caso de que haya q buscar mas de una ocurrencia
+            break
+    if q != m:
+        return print("None")
+    else:
+        return
+
+def computePrefixFunction(p):
+    m = len(p)
+    pi = [0]*m
+    pi[0] = 0
+    k = 0
+    for q in range(1,m):
+        while k > 0 and p[k] != p[q]:
+            k = pi[k]
+        if p[k] == p[q]:
+            k += 1
+        pi[q] = k
+    return pi
 
